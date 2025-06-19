@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { red } from "@mui/material/colors";
 import "../App.css";
 import { addFlight, allFlightApi } from "../services/allApi";
 
@@ -16,9 +14,6 @@ const Header = ({ setFlightData,setDummyFlightData }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen  (false);
-
-  
-
   const [flightDetails, setFlightDetails] = useState({
     flightName: "",
     flightNumber: "",
@@ -41,6 +36,7 @@ const Header = ({ setFlightData,setDummyFlightData }) => {
     getAllFlight();
   }, [addFlight]);
 
+//function for getting all flight details   
   const getAllFlight = async () => {
     const flightDetails = await allFlightApi();
     // console.log(flightDetails)
@@ -115,6 +111,7 @@ const timeDifference = (dTime, aTime) => {
     return totalTime;
   }; 
 
+//   function for adding flight
   const handleFlight = async () => {
     timeDifference(flightDetails.departureTime,flightDetails.arrivalTime)
   const {
@@ -129,7 +126,7 @@ const timeDifference = (dTime, aTime) => {
       price
     } = flightDetails;
 
-  // console.log(totalTime);
+
   console.log(flightDetails);
     if (
       flightName &&
@@ -142,7 +139,7 @@ const timeDifference = (dTime, aTime) => {
       arrivalTime &&
       price
     ) {
-      // api call for adding flight in db
+      // api call for adding flight to db
       try {
         console.log("inside try catch block of handle flight");
         await addFlight(flightDetails);
@@ -158,6 +155,7 @@ const timeDifference = (dTime, aTime) => {
   };
   //   console.log(flightDetails);
 
+//   reset function 
   const clearData = () => {
     setFlightDetails({
       flightName: "",
@@ -172,6 +170,9 @@ const timeDifference = (dTime, aTime) => {
     });
     handleClose();
   };
+
+
+//   style for flight adding modal
   const style = {
     position: "absolute",
     top: "50%",

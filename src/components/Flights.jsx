@@ -9,7 +9,6 @@ const Flights = ({ flightData, dummyFlightData }) => {
     minTime: 0,
     maxTime: 0,
   });
-  // console.log(range);
 
   // travel time calculator in hh:mm
   const durationCalculator = (dTime, aTime) => {
@@ -19,8 +18,8 @@ const Flights = ({ flightData, dummyFlightData }) => {
     const min = difference % 60;
     return ` ${hrs}:  ${min}`;
   };
-  // time difference in minute
 
+  // time difference convert into minute
   const timeDifference = (dTime, aTime) => {
     const [dTimeHr, dTimeMin] = dTime.split(":").map(Number);
     const [aTimeHr, aTimeMin] = aTime.split(":").map(Number);
@@ -31,30 +30,11 @@ const Flights = ({ flightData, dummyFlightData }) => {
     return totalTime;
   };
 
-  const filterResult = () => {
-    const price = 50000;
-    
-    const checkCondition = (data) => {
-      // flightData.map((data) => {
-      //   return data.price;
-      // });
-      if (
-        (data?.price && data.price > price) ||
-        (data?.duration && data.duration > 10)
-      ) {
-        return data;
-      }
-    };
-    // const result = flightData.filter(checkCondition);
-    // console.log(result)
-
-    // console.log(result)
-  };
-  filterResult();
   return (
     <>
       <div className="grid md:grid-cols-3 gap-4">
         {/* filter section */}
+
         <div className=" px-10">
           {/* range */}
           <div className="flex flex-col">
@@ -93,22 +73,13 @@ const Flights = ({ flightData, dummyFlightData }) => {
               </div>
             </div>
           </div>
-          {/* flight names */}
-          <div>
-            <input
-              id="candidates"
-              aria-describedby="candidates-description"
-              name="candidates"
-              type="checkbox"
-              className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-            />
-            <label htmlFor="">Indigo</label>
-          </div>
+
           <button className="bg-blue-400 px-5 rounded py-3 text-slate-100 hover:bg-transparent hover:text-blue-400 border border-blue-400 mt-5">
             {" "}
             Filter
           </button>
         </div>
+
 
         {/* fight details section */}
         <div className="md:col-span-2 ">
@@ -159,22 +130,25 @@ const Flights = ({ flightData, dummyFlightData }) => {
                 </div>
                 <div className="text-slate-800">{items.departureDate}</div>
               </div> */}
-               <div className="md:w-80 flex">
-                                {/* departure city and time */}
+              <div className="md:w-80 flex">
+                {/* departure city and time */}
                 <div className="flex flex-col items-end">
                   <span className="font-bold">{items.departureTime}</span>
-                  <span className="font-bold text-xl">{items.departureCity}</span>
+                  <span className="font-bold text-xl">
+                    {items.departureCity}
+                  </span>
                 </div>
 
                 <div className="flex flex-col items-center">
-                <span className="mx-10 font-thin">Duration: {durationCalculator(
-                      items.departureTime,
-                      items.arrivalTime
-                    )} hr</span>
+                  <span className="mx-10 font-thin">
+                    Duration:{" "}
+                    {durationCalculator(items.departureTime, items.arrivalTime)}{" "}
+                    hr
+                  </span>
                   <span className="text-xs  "> ─────────────────</span>
-                   <div className="text-slate-800">{items.departureDate}</div>
+                  <div className="text-slate-800">{items.departureDate}</div>
                 </div>
-                              {/* arival date and time */}
+                {/* arival date and time */}
                 <div className="flex flex-col items-start">
                   <span className="font-bold">{items.arrivalTime}</span>
                   <span className="font-bold text-xl">{items.arrivalCity}</span>
