@@ -12,7 +12,7 @@ function App() {
   return (
     <>
     <Header />
-      <div className=' w-full  pt-20 bg-slate-100'>
+      <div className=' w-full  pt-3 bg-slate-100'>
         <PremiumFlights/>
         <SearchFlights />
         
