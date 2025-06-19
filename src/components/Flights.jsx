@@ -1,7 +1,56 @@
 import { duration, Slider } from "@mui/material";
 import { useEffect, useState } from "react";
+import { allFlightApi } from "../services/allApi";
 
-const Flights = () => {
+const Flights = ({ flightData, dummyFlightData }) => {
+  const [range, setRange] = useState(0);
+  console.log(dummyFlightData);
+  const [travelTime, setTravellTime] = useState({
+    minTime: 0,
+    maxTime: 0,
+  });
+  // console.log(range);
+
+  // travel time calculator in hh:mm
+  const durationCalculator = (dTime, aTime) => {
+    const difference = timeDifference(dTime, aTime);
+    // console.log(difference)
+    const hrs = Math.floor(difference / 60);
+    const min = difference % 60;
+    return ` ${hrs}:  ${min}`;
+  };
+  // time difference in minute
+
+  const timeDifference = (dTime, aTime) => {
+    const [dTimeHr, dTimeMin] = dTime.split(":").map(Number);
+    const [aTimeHr, aTimeMin] = aTime.split(":").map(Number);
+
+    const departureMinutes = dTimeHr * 60 + dTimeMin;
+    const arrivalMinutes = aTimeHr * 60 + aTimeMin;
+    const totalTime = Math.abs(arrivalMinutes - departureMinutes);
+    return totalTime;
+  };
+
+  const filterResult = () => {
+    const price = 50000;
+    
+    const checkCondition = (data) => {
+      // flightData.map((data) => {
+      //   return data.price;
+      // });
+      if (
+        (data?.price && data.price > price) ||
+        (data?.duration && data.duration > 10)
+      ) {
+        return data;
+      }
+    };
+    // const result = flightData.filter(checkCondition);
+    // console.log(result)
+
+    // console.log(result)
+  };
+  filterResult();
   return (
     <>
       <div className="grid md:grid-cols-3 gap-4">
@@ -9,7 +58,7 @@ const Flights = () => {
         <div className=" px-10">
           {/* range */}
           <div className="flex flex-col">
-            <span className="text-slate-600">Range: ₹</span>
+            <span className="text-slate-600">Range: ₹{range}</span>
             <Slider
               size="small"
               defaultValue={70}
@@ -17,6 +66,7 @@ const Flights = () => {
               max={20000}
               aria-label="Small"
               valueLabelDisplay="auto"
+              onChange={(e) => setRange(e.target.value)}
             />
           </div>
           {/* travel time  */}
@@ -76,46 +126,72 @@ const Flights = () => {
           </div>
 
           {/* flights info section */}
-
-          <div className="flex flex-col bg-white md:flex-row items-center justify-center md:mr-3  border border-slate-200  rounded shadow md:px-10 py-5 md:py-20 mb-2">
-            {/* flight name */}
-            <span className="md:text-4xl flex flex-col text-2xl  font-bold md:w-50 mb-10 md:mb-0">
-              <span className="">Air india</span>
-              <span className="font-thin text-2xl">AC973</span>
-            </span>
-            {/* flight details */}
-            
-            
-              <div className="md:w-80 flex">
+          {dummyFlightData == false ? (
+            <span className="text-2xl font-bold">No flights found</span>
+          ) : null}
+          {dummyFlightData?.map((items) => (
+            <div className="flex flex-col bg-white md:flex-row items-center justify-center md:mr-3  border border-slate-200  rounded shadow md:px-10 py-5 md:py-20 mb-2">
+              {/* flight name */}
+              <span className="md:text-4xl flex  flex-col text-2xl  font-bold md:w-50 mb-10 md:mb-0">
+                <span className="">{items.flightName}</span>
+                <span className="font-thin text-2xl">{items.flightNumber}</span>
+              </span>
+              {/* flight details */}
+              {/* <div className="flex flex-col items-center">
+                <div className="flex justify-between ">
+                  <span className="font-bold">{items.departureTime}</span>
+                  <span className="mx-10 font-thin">
+                    Total Time:
+                    {durationCalculator(
+                      items.departureTime,
+                      items.arrivalTime
+                    )}{" "}
+                    hr
+                  </span>
+                  <span className="font-bold">{items.arrivalTime}</span>
+                </div>
+                <div className="md:w-80">
+                  <span className="font-bold text-xl">
+                    {items.departureCity}
+                  </span>
+                  <span className="text-xs  "> ─────────────────</span>
+                  <span className="font-bold text-xl">{items.arrivalCity}</span>
+                </div>
+                <div className="text-slate-800">{items.departureDate}</div>
+              </div> */}
+               <div className="md:w-80 flex">
+                                {/* departure city and time */}
                 <div className="flex flex-col items-end">
-                  <span className="font-bold">09:10</span>
-                  <span className="font-bold text-xl">Kochi</span>
+                  <span className="font-bold">{items.departureTime}</span>
+                  <span className="font-bold text-xl">{items.departureCity}</span>
                 </div>
 
                 <div className="flex flex-col items-center">
-                <span className="mx-10 font-thin">Duration: 01:00 hr</span>
+                <span className="mx-10 font-thin">Duration: {durationCalculator(
+                      items.departureTime,
+                      items.arrivalTime
+                    )} hr</span>
                   <span className="text-xs  "> ─────────────────</span>
-                   <div className="text-slate-800">10-6-2025</div>
+                   <div className="text-slate-800">{items.departureDate}</div>
                 </div>
-
+                              {/* arival date and time */}
                 <div className="flex flex-col items-start">
-                  <span className="font-bold">10:30</span>
-                  <span className="font-bold text-xl">Kollam</span>
+                  <span className="font-bold">{items.arrivalTime}</span>
+                  <span className="font-bold text-xl">{items.arrivalCity}</span>
                 </div>
               </div>
-             
-            
 
-            <div className="flex flex-col md:items-start md:w-50 px-2 py-5 md:items-start  md:ml-2 md:px-5 bg-slate-100">
-              <span className="text-xl font-thin">
-                Rs <span className="font-normal">8000</span>
-              </span>
-              <span className=" text-green-800">Refundable with charges</span>
-              <button className="bg-pink-600 px-2 py-2 rounded text-white hover:text-pink-600 hover:bg-white border border-pink-600 mt-4">
-                Book now
-              </button>
+              <div className="flex flex-col md:items-start md:w-50 px-2 py-5 md:items-start  md:ml-2 md:px-5 bg-slate-100">
+                <span className="text-xl font-thin">
+                  Rs <span className="font-normal">{items.price}</span>
+                </span>
+                <span className=" text-green-800">Refundable with charges</span>
+                <button className="bg-pink-600 px-2 py-2 rounded text-white hover:text-pink-600 hover:bg-white border border-pink-600 mt-4">
+                  Book now
+                </button>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </>
